@@ -4,6 +4,7 @@ namespace TrashPanda\OpCacheMonitor\Controller\Adminhtml\Config;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\Model\View\Result\Page;
@@ -32,10 +33,11 @@ class View extends Action
         parent::__construct($context);
     }
 
-    public function execute() : Page
+    public function execute() : ResultInterface
     {
         $page = $this->resultPageFactory->create();
 
-        return $page->getConfig()->getTitle()->prepend(__('OpCache Overview'));
+        $page->getConfig()->getTitle()->prepend(__('OpCache Overview'));
+        return $page;
     }
 }
