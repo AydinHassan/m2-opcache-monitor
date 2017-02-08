@@ -2,7 +2,7 @@
 
 <p align="center">Monitor and control PHP OpCache from the Admin </p>
 
-![Module Preview](https://cloud.githubusercontent.com/assets/2817002/22761659/06450f40-ee5c-11e6-89e0-d52742a80c40.png)
+![Module Preview](https://cloud.githubusercontent.com/assets/2817002/22761808/ade7eb82-ee5c-11e6-837b-837fdff611aa.png)
 
 ## Installation
 
