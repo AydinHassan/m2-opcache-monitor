@@ -41,48 +41,56 @@ class OpCache extends Template
         return $this->config['blacklist'];
     }
 
-    public function getAvailableMemory() : string
+    public function getAvailableMemoryInBytes() : string
     {
         return $this->formatBytes($this->config['directives']['opcache.memory_consumption']);
     }
 
-    public function getUsedMemory() : string
+    public function getUsedMemoryInBytes() : string
     {
         return $this->formatBytes($this->status['memory_usage']['used_memory']);
     }
 
-    public function getFreeMemory() : string
+    public function getFreeMemoryInBytes() : string
     {
         return $this->formatBytes($this->status['memory_usage']['free_memory']);
     }
 
-    public function getWastedMemory() : string
+    public function getWastedMemoryInBytes() : string
     {
         return $this->formatBytes($this->status['memory_usage']['wasted_memory']);
     }
 
-    public function getUsedMemoryPercentage() : float
+    public function getUsedMemory() : int
     {
-        $available = $this->config['directives']['opcache.memory_consumption'];
-        $used = $this->status['memory_usage']['used_memory'];
-
-        return (float) ($available / 100) * $used;
+        return $this->status['memory_usage']['used_memory'];
     }
 
-    public function getFreeMemoryPercentage() : float
+    public function getFreeMemory() : int
     {
-        $available = $this->config['directives']['opcache.memory_consumption'];
-        $used = $this->status['memory_usage']['free_memory'];
-
-        return (float) ($available / 100) * $used;
+        return $this->status['memory_usage']['free_memory'];
     }
 
-    public function getWastedMemoryPercentage() : float
+    public function getWastedMemory() : int
     {
-        $available = $this->config['directives']['opcache.memory_consumption'];
-        $used = $this->status['memory_usage']['wasted_memory'];
+        return $this->status['memory_usage']['wasted_memory'];
+    }
 
-        return (float) ($available / 100) * $used;
+    public function getNumCachedKeys() : int
+    {
+        return $this->status['opcache_statistics']['num_cached_scripts'];
+    }
+
+    public function getNumFreeCacheKeys() : int
+    {
+        $stats = $this->status['opcache_statistics'];
+        return $stats['max_cached_keys'] - $stats['num_cached_keys'];
+    }
+
+    public function getNumWastedCacheKeys() : int
+    {
+        $stats = $this->status['opcache_statistics'];
+        return $stats['num_cached_keys'] - $stats['num_cached_scripts'];
     }
 
     public function scripts() : array

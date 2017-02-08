@@ -1,6 +1,10 @@
 <div class="dashboard-container row">
     <div class="dashboard-main col-m-10 col-m-push-2">
-        <div id="memory-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        <div class="row">
+            <div id="memory-chart" style="height: 400px" class="col-m-6"></div>
+            <div id="stats-chart" style="height: 400px" class="col-m-6"></div>
+        </div>
+
         <script type="text/javascript">
             require(['jquery','highcharts'], function($){
                 Highcharts.chart('memory-chart', {
@@ -11,7 +15,7 @@
                         type: 'pie'
                     },
                     title: {
-                        text: 'OpCache Memory Usage'
+                        text: 'Memory Usage'
                     },
                     tooltip: {
                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -34,19 +38,61 @@
                         colorByPoint: true,
                         data: [{
                             name: 'Used',
-                            y: <?= $this->getUsedMemoryPercentage() ?>,
+                            y: <?= $this->getUsedMemory() ?>,
                             sliced: true,
                             selected: true
                         }, {
                             name: 'Free',
-                            y: <?= $this->getFreeMemoryPercentage() ?>,
+                            y: <?= $this->getFreeMemory() ?>,
                         }, {
                             name: 'Wasted',
-                            y: <?= $this->getWastedMemoryPercentage() ?>
+                            y: <?= $this->getWastedMemory() ?>
+                        }]
+                    }]
+                });
+                Highcharts.chart('stats-chart', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Key Usage'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Keys',
+                        colorByPoint: true,
+                        data: [{
+                            name: 'Used',
+                            y: <?= $this->getNumCachedKeys() ?>,
+                            sliced: true,
+                            selected: true
+                        }, {
+                            name: 'Free',
+                            y: <?= $this->getNumFreeCacheKeys() ?>,
+                        }, {
+                            name: 'Wasted',
+                            y: <?= $this->getNumWastedCacheKeys() ?>
                         }]
                     }]
                 })
-
             });
         </script>
     </div>
@@ -61,19 +107,19 @@
         </div>
         <div class="dashboard-item">
             <div class="dashboard-item-title"><?=  __('Available Memory') ?></div>
-            <?= $this->getAvailableMemory() ?>
+            <?= $this->getAvailableMemoryInBytes() ?>
         </div>
         <div class="dashboard-item">
             <div class="dashboard-item-title"><?=  __('Used Memory') ?></div>
-            <?= $this->getUsedMemory() ?>
+            <?= $this->getUsedMemoryInBytes() ?>
         </div>
         <div class="dashboard-item">
             <div class="dashboard-item-title"><?=  __('Free Memory') ?></div>
-            <?= $this->getFreeMemory() ?>
+            <?= $this->getFreeMemoryInBytes() ?>
         </div>
         <div class="dashboard-item">
             <div class="dashboard-item-title"><?=  __('Wasted Memory') ?></div>
-            <?= $this->getWastedMemory() ?>
+            <?= $this->getWastedMemoryInBytes() ?>
         </div>
     </div>
 </div>
