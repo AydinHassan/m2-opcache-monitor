@@ -1,0 +1,42 @@
+{
+    "name": "trash-panda/m2-opcache-monitor",
+    "description": "Monitor PHP OpCache from the Magento 2 Admin",
+    "type": "magento2-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aydin Hassan",
+            "email": "aydin@hotmail.co.uk"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    ],
+    "require": {
+        "php" : "^7.0",
+        "magento/module-backend": "*",
+        "ext-zend-opcache": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0",
+        "squizlabs/php_codesniffer": "^2.8"
+    },
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "TrashPanda\\OpCacheMonitor\\": ""
+        }
+    },
+    "scripts": {
+        "test": [
+            "@cs",
+            "phpunit"
+        ],
+        "cs": "phpcs src",
+        "cs-fix": "phpcbf src",
+        "coverage" : "phpunit --coverage-text"
+    }
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="TrashPanda_OpCacheMonitor::opcache"
+             title="OpCache"
+             module="TrashPanda_OpCacheMonitor"
+             sortOrder="130"
+             parent="Magento_Backend::system"
+             resource="Magento_Backend::system"/>
+
+        <add id="TrashPanda_OpCacheMonitor::opcache_view"
+             title="View OpCache Config"
+             module="TrashPanda_OpCacheMonitor"
+             sortOrder="10"
+             parent="TrashPanda_OpCacheMonitor::opcache"
+             action="opcache/config/view"
+             resource="Magento_Backend::system"/>
+    </menu>
+</config>

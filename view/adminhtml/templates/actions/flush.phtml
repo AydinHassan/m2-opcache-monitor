@@ -1,0 +1,16 @@
+<div class="page-actions">
+    <div class="page-actions-inner">
+        <div class="page-actions-buttons">
+            <form
+                action="<?= $block->getUrl('*/flush'); ?>" method="post">
+                <input name="form_key" type="hidden" value="<?= $block->getFormKey() ?>"/>
+                <button
+                    class="action-primary"
+                    type="submit"
+                    title="Flush OpCache">
+                    <?= __('Flush OpCache') ?>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

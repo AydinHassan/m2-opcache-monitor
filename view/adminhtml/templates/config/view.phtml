@@ -1,0 +1,151 @@
+<div class="dashboard-container row">
+    <div class="dashboard-main col-m-10 col-m-push-2">
+        <div id="memory-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        <script type="text/javascript">
+            require(['jquery','highcharts'], function($){
+                Highcharts.chart('memory-chart', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'OpCache Memory Usage'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Memory',
+                        colorByPoint: true,
+                        data: [{
+                            name: 'Used',
+                            y: <?= $this->getUsedMemoryPercentage() ?>,
+                            sliced: true,
+                            selected: true
+                        }, {
+                            name: 'Free',
+                            y: <?= $this->getFreeMemoryPercentage() ?>,
+                        }, {
+                            name: 'Wasted',
+                            y: <?= $this->getWastedMemoryPercentage() ?>
+                        }]
+                    }]
+                })
+
+            });
+        </script>
+    </div>
+    <div class="dashboard-secondary col-m-2 col-m-pull-10">
+        <div class="dashboard-item">
+            <div class="dashboard-item-title"><?=  __('Opcache Enabled') ?></div>
+            <?= $this->opcacheEnabled() ? 'Yes' : 'No' ?>
+        </div>
+        <div class="dashboard-item">
+            <div class="dashboard-item-title"><?=  __('Opcache Version') ?></div>
+            <?= $this->getVersion() ?>
+        </div>
+        <div class="dashboard-item">
+            <div class="dashboard-item-title"><?=  __('Available Memory') ?></div>
+            <?= $this->getAvailableMemory() ?>
+        </div>
+        <div class="dashboard-item">
+            <div class="dashboard-item-title"><?=  __('Used Memory') ?></div>
+            <?= $this->getUsedMemory() ?>
+        </div>
+        <div class="dashboard-item">
+            <div class="dashboard-item-title"><?=  __('Free Memory') ?></div>
+            <?= $this->getFreeMemory() ?>
+        </div>
+        <div class="dashboard-item">
+            <div class="dashboard-item-title"><?=  __('Wasted Memory') ?></div>
+            <?= $this->getWastedMemory() ?>
+        </div>
+    </div>
+</div>
+<div class="dashboard-container row">
+    <div class="dashboard-main col-m-12">
+        <div id="opcache_tab" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <ul class="tabs-horiz ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+                <li class="ui-state-default ui-corner-top" role="tab" tabindex="0" aria-controls="diagram_tab_orders_content" aria-labelledby="diagram_tab_orders" aria-selected="true">
+                    <a href="#tab_ini_content" id="tab_ini" title="Ini Settings" class="ui-tabs-anchor" data-tab-type="" role="presentation" tabindex="-1">
+                        <span>Ini Settings</span>
+                    </a>
+                </li>
+                <li class="ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="diagram_tab_amounts_content" aria-labelledby="diagram_tab_amounts" aria-selected="false">
+                    <a href="#tab_scripts_content" id="tab_scripts" title="Cached Scripts" class="ui-tabs-anchor" data-tab-type="" role="presentation" tabindex="-1">
+                        <span>Cached Scripts</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <script>
+            require(["jquery","mage/backend/tabs"], function($){
+                $(function() {
+                    $('#opcache_tab').tabs({
+                        active: 'tab_ini',
+                        destination: '#opcache_tab_content',
+                        shadowTabs: []
+                    });
+                });
+            });
+        </script>
+        <div id="opcache_tab_content">
+            <div id="tab_ini_content" style="display: none;" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="false" aria-hidden="true">
+                <table class="admin__table-secondary">
+                    <thead>
+                    <tr>
+                        <th class="data-grid-th  no-link">Setting</th>
+                        <th class="data-grid-th  no-link">Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($this->getDirectives() as $key => $value) : ?>
+                        <tr>
+                            <td><?= $key ?></td>
+                            <td><?= $value ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    </tbody>
+
+                </table>
+            </div>
+            <div id="tab_scripts_content" style="display: none;" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="false" aria-hidden="true">
+                <table class="admin__table-secondary">
+                    <thead>
+                    <tr>
+                        <th class="data-grid-th  no-link">File</th>
+                        <th class="data-grid-th  no-link">Hits</th>
+                        <th class="data-grid-th  no-link">Memory Usage</th>
+                        <th class="data-grid-th  no-link">Last Used</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($this->scripts() as $script) : ?>
+                        <tr>
+                            <td><?= $script['full_path'] ?></td>
+                            <td><?= $script['hits'] ?></td>
+                            <td><?= $script['memory_consumption'] ?></td>
+                            <td><?= $script['last_used'] ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
